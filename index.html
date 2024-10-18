@@ -13,6 +13,7 @@
             margin: 0;
             height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center; 
             align-items: center; 
         }
@@ -47,10 +48,87 @@
         .wrong {
             color: red;
         }
+
+        /* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
     </style>
 </head>
 <body>
+    <div style="display: flex;">
+        <span style="display: flex; align-self: center;">Svih 112 Pitanja</span>
+        <span style="visibility: hidden;">space</span>
+        <label class="switch">
+            <input type="checkbox" checked>
+            <span class="slider round"></span>
+        </label>
+        <span style="visibility: hidden;">space</span>
+        <span style="display: flex; align-self: center;">40 pitanja, imitacija pravog testa</span>
+    </div>
+    </br></br></br></br>
+
     <div class="container">
+
         <div id="quiz">
             <div class="question" id="question">Pitanje će biti ovde</div>
             <ul class="answers" id="answers">
@@ -66,6 +144,7 @@
 
     <script>
 const questions = [
+
     {
         question: "Definicija bespilotnog vazduhoplova je:",
         answers: [
@@ -1077,14 +1156,32 @@ const questions = [
         trueCount: 4
     }
 ]
+        
+        
         let currentQuestionIndex = 0;
         let score = 0;
-        const toggleButton = document.getElementById('toggleButton');
+        let randomizedQuestions = shuffleArray(questions);
+        let numQuestionToDisplay = 40;
+
+        const toggles = document.querySelectorAll('.switch input[type="checkbox"]');
+
+        // Add event listener to each toggle
+        toggles.forEach(toggle => {
+        toggle.addEventListener('change', (event) => {
+            if (event.target.checked) {
+            console.log('Toggle is ON');
+            numQuestionToDisplay = 40;
+            } else {
+            console.log('Toggle is OFF');
+            numQuestionToDisplay = questions.length - 1;
+            }
+        });
+        });
 
         function showQuestion() {
             const questionElement = document.getElementById("question");
             const answersElement = document.getElementById("answers");
-            const currentQuestion = questions[currentQuestionIndex];
+            const currentQuestion = randomizedQuestions[currentQuestionIndex];
 
             questionElement.innerText = currentQuestion.question;
             answersElement.innerHTML = "";
@@ -1111,12 +1208,12 @@ const questions = [
         }
 
         function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]]; // Swap elements
-    }
-    return array;
-}
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+            }
+            return array;
+        }
 
         var expectedCorrectAnswers = 0;
         var correctAnswers = 0;
@@ -1177,7 +1274,7 @@ const questions = [
 
         function nextQuestion() {
             currentQuestionIndex++;
-            if (currentQuestionIndex < questions.length) {
+            if (currentQuestionIndex <= numQuestionToDisplay) {
                 showQuestion();
             } else {
                 showResult();
@@ -1187,7 +1284,7 @@ const questions = [
         function showResult() {
             document.getElementById("quiz").style.display = "none";
             document.getElementById("result").style.display = "block";
-            document.getElementById("score").innerText = `Vaš rezultat: ${score}/${questions.length}`;
+            document.getElementById("score").innerText = `Vaš rezultat: ${score}/${numQuestionToDisplay}`;
         }
 
         function restartQuiz() {
