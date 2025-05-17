@@ -1,6 +1,6 @@
 {
-    "name": "My Progressive Web App",
-    "short_name": "Bezpilotni Vazduhoplov kviz",
+    "name": "Dron Kviz",
+    "short_name": "kviz",
     "start_url": "/index.html",
     "display": "standalone",
     "background_color": "#ffffff",
