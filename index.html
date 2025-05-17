@@ -2,9 +2,10 @@
 <!DOCTYPE html>
 <html lang="sr">
 <head>
+    <base href="./">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#000000">
     <link rel="icon" href="/images/android-launchericon-192-192.png" sizes="192x192" type="image/png">
     <title>Kviz: Želite li da postanete operater vazduhoplova?</title>
@@ -1330,7 +1331,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
 
 
         if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/service-worker.js')
+  navigator.serviceWorker.register('/service-worker.js', {scope: './'})
     .then(registration => {
       console.log('Service Worker registered with scope:', registration.scope);
     })
