@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="/manifest.json">
     <title>Kviz: Želite li da postanete operater vazduhoplova?</title>
     <style>
         body {
@@ -1298,6 +1299,28 @@ const questions = [
         document.getElementById("nextBtn").style.display = "none";
         showQuestion();
 
+        if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/service-worker.js')
+    .then(registration => {
+      console.log('Service Worker registered with scope:', registration.scope);
+    })
+    .catch(error => {
+      console.error('Service Worker registration failed:', error);
+    });
+}
+
+if ('Notification' in window && navigator.serviceWorker) {
+  Notification.requestPermission(status => {
+    if (status === 'granted') {
+      navigator.serviceWorker.ready.then(registration => {
+        registration.showNotification('Hello World!', {
+          body: 'This is a push notification.',
+          icon: '/images/android-launchericon-192-192.png'
+        });
+      });
+    }
+  });
+}
     
         
     </script>
